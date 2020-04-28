@@ -282,13 +282,17 @@ exports.verifyPath = path => {
  */
 exports.sandbox = (sandbox, script) => {
   try {
-    const vm = require('vm');
-    sandbox = sandbox || {};	
-    script = new vm.Script(script);	
-    const context = new vm.createContext(sandbox);	
-    script.runInContext(context, {	
-      timeout: 3000	
-    });	      
+    const { NodeVM } = require('vm2');
+    sandbox = sandbox || {};
+    const vm = new NodeVM({
+      require: {
+        external: true
+      },
+      sandbox: sandbox,
+      timeout: 3000
+    })
+
+    vm.run(script)
     return sandbox
   } catch (err) {
     throw err
