@@ -790,5 +790,6 @@
   "User.Profile.密码": "密码",
   "User.Profile.点击头像更换 (只支": "点击头像更换 (只支持jpg、png格式且大小不超过200kb的图片)",
   "User.Profile.图片的格式只能为 j": "图片的格式只能为 jpg、png！",
-  "User.Profile.图片必须小于 200": "图片必须小于 200kb!"
+  "User.Profile.图片必须小于 200": "图片必须小于 200kb!",
+  "components.ErrMsg.该操作未改动 Api": "该操作未改动 Api 数据"
 }

@@ -23,7 +23,6 @@ export function getLocale(){
 
 export function switchLng(lng){
     window.document.cookie = `${keyName}=${lng};expires=${new Date(Date.now()+ 1000 * 60 * 60 * 240).toUTCString()};path=/`;
-    // todo: change path
     currentLocale = lng;
     return intl.init({
         currentLocale: lng, // TODO: determine locale here
@@ -34,5 +33,3 @@ export function switchLng(lng){
 export function init(){
     return switchLng(getLocale());
 }
-
-init()
