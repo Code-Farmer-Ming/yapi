@@ -141,7 +141,7 @@ class statisticsPage extends Component {
   }
 
   async componentWillMount() {
-    this.props.setBreadcrumb([{ name: '系统信息' }]);
+    this.props.setBreadcrumb([{ name: 'System' }]);
     this.getStatisData();
     this.getSystemStatusData();
     this.getGroupData();
