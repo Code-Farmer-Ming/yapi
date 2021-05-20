@@ -15,7 +15,7 @@ const store = createStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <LocaleProvider locale={zhCN}>
+    <LocaleProvider >
       <App />
     </LocaleProvider>
   </Provider>,
