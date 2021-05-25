@@ -2,7 +2,7 @@ import React, { PureComponent as Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Table, Button, Modal, message, Tooltip, Select, Icon } from 'antd';
+import { Table, Button, Modal, Form, Input, message, Tooltip, Select, Icon } from 'antd';
 import AddInterfaceForm from './AddInterfaceForm';
 import {
   fetchInterfaceListMenu,
@@ -14,10 +14,95 @@ import { Link } from 'react-router-dom';
 import variable from '../../../../constants/variable';
 import './Edit.scss';
 import Label from '../../../../components/Label/Label.js';
-import intl from "react-intl-universal";
+import './interfaceList.scss';
 
 const Option = Select.Option;
 const limit = 20;
+
+const EditableContext = React.createContext();
+
+const EditableRow = ({ form, index, ...props }) => (
+  <EditableContext.Provider value={form}>
+    <tr {...props} />
+  </EditableContext.Provider>
+);
+
+class EditableCell extends React.Component {
+  state = {
+    editing: false
+  };
+
+  toggleEdit = () => {
+    const editing = !this.state.editing;
+    this.setState({ editing }, () => {
+      if (editing) {
+        this.input.focus();
+      }
+    });
+  };
+
+  save = e => {
+    const { record, handleSave } = this.props;
+    this.form.validateFields((error, values) => {
+      if (error && error[e.currentTarget.id]) {
+        return;
+      }
+      this.toggleEdit();
+      handleSave({ ...record, ...values });
+    });
+  };
+
+  renderCell = form => {
+    this.form = form;
+    const { children, dataIndex, record, title } = this.props;
+    const { editing } = this.state;
+    return editing ? (
+      <Form.Item style={{ margin: 0 }}>
+        {form.getFieldDecorator(dataIndex, {
+            rules: [
+              {
+                required: true,
+                message: `${title} is required.`
+              }
+            ],
+            initialValue: record[dataIndex]
+          })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+      </Form.Item>
+    ) : (
+      <div
+            className="editable-cell-value-wrap"
+            style={{ paddingRight: 24 }}
+            onClick={this.toggleEdit}
+        >
+        {children}
+      </div>
+    );
+  };
+
+  render() {
+    const {
+      editable,
+      dataIndex,
+      title,
+      record,
+      index,
+      handleSave,
+      children,
+      ...restProps
+    } = this.props;
+    return (
+      <td {...restProps}>
+        {editable ? (
+          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+          ) : (
+              children
+          )}
+      </td>
+    );
+  }
+}
+
+const EditableFormRow = Form.create()(EditableRow);
 
 @connect(
   state => {
@@ -111,7 +196,7 @@ class InterfaceList extends Component {
       let project_id = this.props.match.params.id;
       await this.props.getProject(project_id);
       await this.props.fetchInterfaceListMenu(project_id);
-      message.success(intl.get('InterfaceList.InterfaceList.接口集合简介更新成功'));
+      message.success('接口集合简介更新成功');
     });
   };
 
@@ -148,7 +233,7 @@ class InterfaceList extends Component {
       if (res.data.errcode !== 0) {
         return message.error(`${res.data.errmsg}, 你可以在左侧的接口列表中对接口进行删改`);
       }
-      message.success(intl.get('InterfaceList.InterfaceList.接口添加成功'));
+      message.success('接口添加成功');
       let interfaceId = res.data.data._id;
       this.props.history.push('/project/' + data.project_id + '/interface/api/' + interfaceId);
       this.props.fetchInterfaceListMenu(data.project_id);
@@ -162,7 +247,7 @@ class InterfaceList extends Component {
     };
     let result = await axios.post('/api/interface/up', params);
     if (result.data.errcode === 0) {
-      message.success(intl.get('InterfaceList.InterfaceList.修改成功'));
+      message.success('修改成功');
       this.handleRequest(this.props);
       this.props.fetchInterfaceListMenu(this.props.curProject._id);
     } else {
@@ -177,7 +262,7 @@ class InterfaceList extends Component {
     };
     let result = await axios.post('/api/interface/up', params);
     if (result.data.errcode === 0) {
-      message.success(intl.get('InterfaceList.InterfaceList.修改成功'));
+      message.success('修改成功');
       this.handleRequest(this.props);
     } else {
       message.error(result.data.errmsg);
@@ -196,6 +281,20 @@ class InterfaceList extends Component {
   //   }
   // };
 
+
+  handleSave = row => {
+    const changes = {
+      index: row.index,
+      id: row._id
+    };
+    const me = this;
+    axios.post('/api/interface/up_index', [changes]).then(
+        () => {
+          me.handleRequest(me.props);
+        }
+    );
+  }
+
   render() {
     let tag = this.props.curProject.tag;
     let tagFilter = tag.map(item => {
@@ -204,7 +303,7 @@ class InterfaceList extends Component {
 
     const columns = [
       {
-        title: intl.get('InterfaceList.InterfaceList.接口名称'),
+        title: '接口名称',
         dataIndex: 'title',
         key: 'title',
         width: 30,
@@ -217,7 +316,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: intl.get('InterfaceList.InterfaceList.接口路径'),
+        title: '接口路径',
         dataIndex: 'path',
         key: 'path',
         width: 50,
@@ -234,7 +333,7 @@ class InterfaceList extends Component {
               >
                 {record.method}
               </span>
-              <Tooltip title={intl.get('InterfaceList.InterfaceList.开放接口')} placement="topLeft">
+              <Tooltip title="开放接口" placement="topLeft">
                 <span>{record.api_opened && <Icon className="opened" type="eye-o" />}</span>
               </Tooltip>
               <Tooltip title={path} placement="topLeft" overlayClassName="toolTip">
@@ -245,7 +344,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: intl.get('InterfaceList.InterfaceList.接口分类'),
+        title: '接口分类',
         dataIndex: 'catid',
         key: 'catid',
         width: 28,
@@ -268,7 +367,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: intl.get('InterfaceList.InterfaceList.状态'),
+        title: '状态',
         dataIndex: 'status',
         key: 'status',
         width: 24,
@@ -281,21 +380,21 @@ class InterfaceList extends Component {
               onChange={this.changeInterfaceStatus}
             >
               <Option value={key + '-done'}>
-                <span className="tag-status done">{intl.get('InterfaceList.InterfaceList.已完成')}</span>
+                <span className="tag-status done">已完成</span>
               </Option>
               <Option value={key + '-undone'}>
-                <span className="tag-status undone">{intl.get('InterfaceList.InterfaceList.未完成')}</span>
+                <span className="tag-status undone">未完成</span>
               </Option>
             </Select>
           );
         },
         filters: [
           {
-            text: intl.get('InterfaceList.InterfaceList.已完成'),
+            text: '已完成',
             value: 'done'
           },
           {
-            text: intl.get('InterfaceList.InterfaceList.未完成'),
+            text: '未完成',
             value: 'undone'
           }
         ],
@@ -307,13 +406,20 @@ class InterfaceList extends Component {
         key: 'tag',
         width: 14,
         render: text => {
-          let textMsg = text.length > 0 ? text.join('\n') : intl.get('InterfaceList.InterfaceList.未设置');
+          let textMsg = text.length > 0 ? text.join('\n') : '未设置';
           return <div className="table-desc">{textMsg}</div>;
         },
         filters: tagFilter,
         onFilter: (value, record) => {
           return record.tag.indexOf(value) >= 0;
         }
+      },
+      {
+        title: '排序',
+        dataIndex: 'index',
+        key: 'index',
+        width: 8,
+        editable: true
       }
     ];
     let intername = '',
@@ -359,11 +465,33 @@ class InterfaceList extends Component {
     const isDisabled = this.props.catList.length === 0;
 
     // console.log(this.props.curProject.tag)
+    const components = {
+      body: {
+        row: EditableFormRow,
+        cell: EditableCell
+      }
+    };
 
+    const editAbleColumns = columns.map(col => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: record => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: this.handleSave
+        })
+      };
+    });
     return (
       <div style={{ padding: '24px' }}>
         <h2 className="interface-title" style={{ display: 'inline-block', margin: 0 }}>
-          {intername ? intername : intl.get('InterfaceList.InterfaceList.全部接口')}{intl.get('InterfaceList.InterfaceList.共 (')}{total}{intl.get('InterfaceList.InterfaceList.) 个')}</h2>
+          {intername ? intername : '全部接口'}共 ({total}) 个
+        </h2>
 
         <Button
           style={{ float: 'right' }}
@@ -371,20 +499,26 @@ class InterfaceList extends Component {
           type="primary"
           onClick={() => this.setState({ visible: true })}
         >
-          {intl.get('InterfaceList.InterfaceList.添加接口')}</Button>
+          添加接口
+        </Button>
         <div style={{ marginTop: '10px' }}>
           <Label onChange={value => this.handleChangeInterfaceCat(value, intername)} desc={desc} />
         </div>
+        {
+          console.log(data)
+        }
         <Table
           className="table-interfacelist"
           pagination={pageConfig}
-          columns={columns}
+          components={components}
+          columns={editAbleColumns}
+          rowClassName={() => 'editable-row'}
           onChange={this.handleChange}
           dataSource={data}
         />
         {this.state.visible && (
           <Modal
-            title={intl.get('InterfaceList.InterfaceList.添加接口')}
+            title="添加接口"
             visible={this.state.visible}
             onCancel={() => this.setState({ visible: false })}
             footer={null}
