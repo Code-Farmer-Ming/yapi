@@ -227,7 +227,7 @@ class projectController extends baseController {
     let catInst = yapi.getInst(interfaceCatModel);
     if (result._id) {
       await colInst.save({
-        name: '公共测试集',
+        name: 'all',
         project_id: result._id,
         desc: '公共测试集',
         uid: this.getUid(),
