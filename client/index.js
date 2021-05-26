@@ -2,6 +2,7 @@ import './styles/common.scss';
 import './styles/theme.less';
 import { LocaleProvider } from 'antd';
 import './plugin';
+import * as i18nHelper from './i18n'; // side effect, load languages
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Application';
@@ -15,7 +16,7 @@ const store = createStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <LocaleProvider >
+    <LocaleProvider  locale={{locale:i18nHelper.getLocale()}}>
       <App />
     </LocaleProvider>
   </Provider>,

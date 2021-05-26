@@ -13,6 +13,7 @@ import LogoSVG from '../LogoSVG/index.js';
 import Breadcrumb from '../Breadcrumb/Breadcrumb.js';
 import GuideBtns from '../GuideBtns/GuideBtns.js';
 const plugin = require('client/plugin.js');
+import intl from "react-intl-universal";
 
 let HeaderMenu = {
   user: {

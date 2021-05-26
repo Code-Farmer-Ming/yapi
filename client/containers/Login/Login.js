@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Form, Button, Input, Icon, message, Radio } from 'antd';
 import { loginActions, loginLdapActions } from '../../reducer/modules/user';
 import { withRouter } from 'react-router';
+import intl from "react-intl-universal";
+
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
@@ -55,14 +57,14 @@ class Login extends Component {
           this.props.loginLdapActions(values).then(res => {
             if (res.payload.data.errcode == 0) {
               this.props.history.replace('/group');
-              message.success('登录成功! ');
+              message.success(intl.get('Login.Login.登录成功!'));
             }
           });
         } else {
           this.props.loginActions(values).then(res => {
             if (res.payload.data.errcode == 0) {
               this.props.history.replace('/group');
-              message.success('登录成功! ');
+              message.success(intl.get('Login.Login.登录成功!'));
             }
           });
         }
@@ -88,7 +90,7 @@ class Login extends Component {
         ? {}
         : {
             required: true,
-            message: '请输入正确的email!',
+            message:  intl.get('Login.Login.请输入正确的emai'),
             pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$/
           };
     return (
@@ -98,7 +100,7 @@ class Login extends Component {
           <FormItem>
             <RadioGroup defaultValue="ldap" onChange={this.handleFormLayoutChange}>
               <Radio value="ldap">LDAP</Radio>
-              <Radio value="normal">普通登录</Radio>
+              <Radio value="normal">{intl.get('Login.Login.普通登录')}</Radio>
             </RadioGroup>
           </FormItem>
         )}
@@ -116,7 +118,7 @@ class Login extends Component {
         {/* 密码 */}
         <FormItem style={formItemStyle}>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: '请输入密码!' }]
+            rules: [{ required: true, message: intl.get('Login.Login.请输入密码!') }]
           })(
             <Input
               style={changeHeight}
@@ -135,7 +137,7 @@ class Login extends Component {
             htmlType="submit"
             className="login-form-button"
           >
-            登录
+            {intl.get('Login.Login.登录')}
           </Button>
         </FormItem>
 

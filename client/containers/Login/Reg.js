@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Form, Button, Input, Icon, message } from 'antd';
 import { regActions } from '../../reducer/modules/user';
 import { withRouter } from 'react-router';
+import intl from "react-intl-universal";
 const FormItem = Form.Item;
 const formItemStyle = {
   marginBottom: '.16rem'
@@ -46,7 +47,7 @@ class Reg extends Component {
         this.props.regActions(values).then(res => {
           if (res.payload.data.errcode == 0) {
             this.props.history.replace('/group');
-            message.success('注册成功! ');
+            message.success(intl.get('Login.Reg.注册成功!'));
           }
         });
       }
@@ -56,7 +57,7 @@ class Reg extends Component {
   checkPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
-      callback('两次输入的密码不一致啊!');
+      callback(intl.get('Login.Reg.两次输入的密码不一致'));
     } else {
       callback();
     }
@@ -77,7 +78,7 @@ class Reg extends Component {
         {/* 用户名 */}
         <FormItem style={formItemStyle}>
           {getFieldDecorator('userName', {
-            rules: [{ required: true, message: '请输入用户名!' }]
+            rules: [{ required: true, message: intl.get('Login.Reg.请输入用户名!') }]
           })(
             <Input
               style={changeHeight}
@@ -93,7 +94,7 @@ class Reg extends Component {
             rules: [
               {
                 required: true,
-                message: '请输入email!',
+                message: intl.get('Login.Reg.请输入email!'),
                 pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$/
               }
             ]
@@ -112,7 +113,7 @@ class Reg extends Component {
             rules: [
               {
                 required: true,
-                message: '请输入密码!'
+                message: intl.get('Login.Reg.请输入密码!')
               },
               {
                 validator: this.checkConfirm
@@ -134,7 +135,7 @@ class Reg extends Component {
             rules: [
               {
                 required: true,
-                message: '请再次输入密码密码!'
+                message: intl.get('Login.Reg.请再次输入密码密码!')
               },
               {
                 validator: this.checkPassword
@@ -158,7 +159,7 @@ class Reg extends Component {
             htmlType="submit"
             className="login-form-button"
           >
-            注册
+            {intl.get('Login.Reg.注册')}
           </Button>
         </FormItem>
       </Form>
