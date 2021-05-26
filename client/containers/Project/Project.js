@@ -12,6 +12,7 @@ import Setting from './Setting/Setting.js';
 import Loading from '../../components/Loading/Loading';
 import ProjectMember from './Setting/ProjectMember/ProjectMember.js';
 import ProjectData from './Setting/ProjectData/ProjectData.js';
+import intl from "react-intl-universal";
 const plugin = require('client/plugin.js');
 @connect(
   state => {
@@ -149,7 +150,7 @@ export default class Project extends Component {
         <Switch>
           <Redirect exact from="/project/:id" to={`/project/${match.params.id}/interface/api`} />
           {/* <Route path={routers.activity.path} component={Activity} />
-          
+
           <Route path={routers.setting.path} component={Setting} />
           {this.props.currGroup.type !== 'private' ?
             <Route path={routers.members.path} component={routers.members.component}/>
