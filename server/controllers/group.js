@@ -105,7 +105,7 @@ class groupController extends baseController {
       let role = await this.getProjectRole(params.id, 'group');
       result.role = role;
       if (result.type === 'private') {
-        result.group_name = 'My Workspace';
+        result.group_name = '个人空间';
       }
       ctx.body = yapi.commons.resReturn(result);
     }
@@ -127,7 +127,7 @@ class groupController extends baseController {
     let params = ctx.params;
 
     // 新版每个人都有权限添加分组
-
+    
     // if (this.getRole() !== 'admin') {
     //   return (ctx.body = yapi.commons.resReturn(null, 401, '没有权限'));
     // }
