@@ -9,6 +9,8 @@ import { setCurrGroup, fetchGroupMsg } from '../../../reducer/modules/group';
 import { changeMenuItem } from '../../../reducer/modules/menu';
 
 import { fetchInterfaceListMenu } from '../../../reducer/modules/interface';
+
+import intl from "react-intl-universal";
 const Option = AutoComplete.Option;
 
 @connect(
@@ -148,7 +150,7 @@ export default class Srch extends Component {
         >
           <Input
             prefix={<Icon type="search" className="srch-icon" />}
-            placeholder="搜索分组/项目/接口"
+            placeholder={intl.get('Search.Search.搜索分组/项目/接口')}
             className="search-input"
           />
         </AutoComplete>
