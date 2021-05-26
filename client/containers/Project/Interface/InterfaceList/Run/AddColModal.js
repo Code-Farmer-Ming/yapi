@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 import { fetchInterfaceColList } from '../../../../../reducer/modules/interfaceCol';
+import intl from 'react-intl-universal'
 
 const { TextArea } = Input;
 const Panel = Collapse.Panel;

@@ -15,6 +15,7 @@ import variable from '../../../../constants/variable';
 import './Edit.scss';
 import Label from '../../../../components/Label/Label.js';
 import './interfaceList.scss';
+import intl from "react-intl-universal";
 
 const Option = Select.Option;
 const limit = 20;
@@ -196,7 +197,7 @@ class InterfaceList extends Component {
       let project_id = this.props.match.params.id;
       await this.props.getProject(project_id);
       await this.props.fetchInterfaceListMenu(project_id);
-      message.success('接口集合简介更新成功');
+      message.success(intl.get('InterfaceList.InterfaceList.接口集合简介更新成功'));
     });
   };
 
@@ -233,7 +234,7 @@ class InterfaceList extends Component {
       if (res.data.errcode !== 0) {
         return message.error(`${res.data.errmsg}, 你可以在左侧的接口列表中对接口进行删改`);
       }
-      message.success('接口添加成功');
+      message.success(intl.get('InterfaceList.InterfaceList.接口添加成功'));
       let interfaceId = res.data.data._id;
       this.props.history.push('/project/' + data.project_id + '/interface/api/' + interfaceId);
       this.props.fetchInterfaceListMenu(data.project_id);
@@ -247,7 +248,7 @@ class InterfaceList extends Component {
     };
     let result = await axios.post('/api/interface/up', params);
     if (result.data.errcode === 0) {
-      message.success('修改成功');
+      message.success(intl.get('InterfaceList.InterfaceList.修改成功'));
       this.handleRequest(this.props);
       this.props.fetchInterfaceListMenu(this.props.curProject._id);
     } else {
@@ -262,7 +263,7 @@ class InterfaceList extends Component {
     };
     let result = await axios.post('/api/interface/up', params);
     if (result.data.errcode === 0) {
-      message.success('修改成功');
+      message.success(intl.get('InterfaceList.InterfaceList.修改成功'));
       this.handleRequest(this.props);
     } else {
       message.error(result.data.errmsg);
@@ -303,7 +304,7 @@ class InterfaceList extends Component {
 
     const columns = [
       {
-        title: '接口名称',
+        title: intl.get('InterfaceList.InterfaceList.接口名称'),
         dataIndex: 'title',
         key: 'title',
         width: 30,
@@ -316,7 +317,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: '接口路径',
+        title: intl.get('InterfaceList.InterfaceList.接口路径'),
         dataIndex: 'path',
         key: 'path',
         width: 50,
@@ -333,7 +334,7 @@ class InterfaceList extends Component {
               >
                 {record.method}
               </span>
-              <Tooltip title="开放接口" placement="topLeft">
+              <Tooltip title={intl.get('InterfaceList.InterfaceList.开放接口')} placement="topLeft">
                 <span>{record.api_opened && <Icon className="opened" type="eye-o" />}</span>
               </Tooltip>
               <Tooltip title={path} placement="topLeft" overlayClassName="toolTip">
@@ -344,7 +345,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: '接口分类',
+        title:  intl.get('InterfaceList.InterfaceList.接口分类'),
         dataIndex: 'catid',
         key: 'catid',
         width: 28,
@@ -367,7 +368,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: '状态',
+        title: intl.get('InterfaceList.InterfaceList.状态'),
         dataIndex: 'status',
         key: 'status',
         width: 24,
@@ -380,21 +381,21 @@ class InterfaceList extends Component {
               onChange={this.changeInterfaceStatus}
             >
               <Option value={key + '-done'}>
-                <span className="tag-status done">已完成</span>
+                <span className="tag-status done">{intl.get('InterfaceList.InterfaceList.已完成')}</span>
               </Option>
               <Option value={key + '-undone'}>
-                <span className="tag-status undone">未完成</span>
+                <span className="tag-status undone">{intl.get('InterfaceList.InterfaceList.未完成')}</span>
               </Option>
             </Select>
           );
         },
         filters: [
           {
-            text: '已完成',
+            text: intl.get('InterfaceList.InterfaceList.已完成'),
             value: 'done'
           },
           {
-            text: '未完成',
+            text: intl.get('InterfaceList.InterfaceList.未完成'),
             value: 'undone'
           }
         ],
@@ -406,7 +407,7 @@ class InterfaceList extends Component {
         key: 'tag',
         width: 14,
         render: text => {
-          let textMsg = text.length > 0 ? text.join('\n') : '未设置';
+          let textMsg = text.length > 0 ? text.join('\n') : intl.get('InterfaceList.InterfaceList.未设置');
           return <div className="table-desc">{textMsg}</div>;
         },
         filters: tagFilter,
@@ -415,7 +416,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title: '排序',
+        title: 'sort',
         dataIndex: 'index',
         key: 'index',
         width: 8,
@@ -490,7 +491,7 @@ class InterfaceList extends Component {
     return (
       <div style={{ padding: '24px' }}>
         <h2 className="interface-title" style={{ display: 'inline-block', margin: 0 }}>
-          {intername ? intername : '全部接口'}共 ({total}) 个
+        {intername ? intername : intl.get('InterfaceList.InterfaceList.全部接口')}{intl.get('InterfaceList.InterfaceList.共 (')}{total}{intl.get('InterfaceList.InterfaceList.) 个')}
         </h2>
 
         <Button
@@ -499,7 +500,7 @@ class InterfaceList extends Component {
           type="primary"
           onClick={() => this.setState({ visible: true })}
         >
-          添加接口
+            {intl.get('InterfaceList.InterfaceList.添加接口')}
         </Button>
         <div style={{ marginTop: '10px' }}>
           <Label onChange={value => this.handleChangeInterfaceCat(value, intername)} desc={desc} />
@@ -518,7 +519,7 @@ class InterfaceList extends Component {
         />
         {this.state.visible && (
           <Modal
-            title="添加接口"
+            title={intl.get('InterfaceList.InterfaceList.添加接口')}
             visible={this.state.visible}
             onCancel={() => this.setState({ visible: false })}
             footer={null}
