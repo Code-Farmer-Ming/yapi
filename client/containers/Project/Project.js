@@ -149,7 +149,7 @@ export default class Project extends Component {
         <Switch>
           <Redirect exact from="/project/:id" to={`/project/${match.params.id}/interface/api`} />
           {/* <Route path={routers.activity.path} component={Activity} />
-
+          
           <Route path={routers.setting.path} component={Setting} />
           {this.props.currGroup.type !== 'private' ?
             <Route path={routers.members.path} component={routers.members.component}/>
