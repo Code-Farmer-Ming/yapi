@@ -177,11 +177,7 @@ module.exports = {
           )
         });
 
-        baseConfig.module.preLoaders.push({
-          test: /\.(js|jsx)$/,
-          exclude: /tui-editor|node_modules|google-diff.js/,
-          loader: 'eslint-loader'
-        });
+
 
         baseConfig.module.preLoaders.push({
           test: /\.json$/,
