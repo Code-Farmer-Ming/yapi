@@ -165,6 +165,7 @@ export default class Run extends Component {
       : 0;
     index = index === -1 ? 0 : index;
 
+    let req_header = [].concat(this.props.data.req_headers || []);
     let header = [].concat(env[index].header || []);
     header.forEach(item => {
       if (!checkNameIsExistInArray(item.name, req_header)) {
