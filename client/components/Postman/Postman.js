@@ -165,7 +165,6 @@ export default class Run extends Component {
       : 0;
     index = index === -1 ? 0 : index;
 
-    let .map(x => Object.assign(x, json2.find(y => y.id == x.id)));req_header = [].concat(this.props.data.req_headers || []);
     let header = [].concat(env[index].header || []);
     header.forEach(item => {
       if (!checkNameIsExistInArray(item.name, req_header)) {
