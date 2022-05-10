@@ -175,7 +175,7 @@ export default class Run extends Component {
         req_header.push(item);
       }
     });
-    req_header.map(x => Object.assign(x, header.find(y => y.name == x.name)));
+    req_header.map(x => Object.assign(x, _.find(header ,y => y.name == x.name)));
     req_header = req_header.filter(item => {
       return item && typeof item === 'object';
     });
