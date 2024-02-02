@@ -41,25 +41,7 @@ export default class Project extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidUpdate() {
-    this.handleAnchorScroll();
-  }
 
-  handleAnchorScroll() {
-    const { hash } = window.location;
-
-    if (hash) {
-      const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
-      setTimeout(() => {
-
-        window.scrollTo({
-          behavior: targetElement ? "smooth" : "auto",
-          top: targetElement ? targetElement.offsetTop : 0
-        });
-        alert('scrollTo');
-      }, 100);
-    }
-  }
   async componentWillMount() {
     await this.props.getProject(this.props.match.params.id);
     await this.props.fetchGroupMsg(this.props.curProject.group_id);
