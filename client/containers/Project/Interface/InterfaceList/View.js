@@ -236,9 +236,13 @@ class View extends Component {
     if (hash) {
       const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
 
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
+
+      setTimeout(() => {
+        window.scrollTo({
+          behavior: targetElement ? "smooth" : "auto",
+          top: targetElement ? targetElement.offsetTop : 0
+        });
+      }, 100);
     }
   }
 
