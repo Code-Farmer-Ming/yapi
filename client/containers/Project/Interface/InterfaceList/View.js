@@ -223,45 +223,25 @@ class View extends Component {
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
-    this.handleAnchorClick();
+    this.handleAnchorScroll();
   }
 
-  componentWillUnmount() {
-    // 在组件卸载前移除事件监听器，清理工作
-    this.removeAnchorClick();
+  componentDidUpdate() {
+    this.handleAnchorScroll();
   }
 
-  handleAnchorClick = () => {
-    // 监听锚点的点击事件
-    const handleAnchorClick = (event) => {
-      event.preventDefault();
-      const targetId = event.target.getAttribute('href').substring(1); // 去掉锚点前的 #
-      const targetElement = document.getElementById(targetId);
+  handleAnchorScroll() {
+    const { hash } = window.location;
+
+    if (hash) {
+      const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
 
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
-    };
+    }
+  }
 
-    // 添加事件监听器到渲染后的HTML内容上
-    const anchorLinks = document.querySelectorAll('a');
-
-    anchorLinks.forEach((link) => {
-      link.addEventListener('click', handleAnchorClick);
-    });
-
-    // 存储事件监听器，以便在组件卸载时移除
-    this.anchorClickHandler = handleAnchorClick;
-  };
-
-  removeAnchorClick = () => {
-    // 移除事件监听器，清理工作
-    const anchorLinks = document.querySelectorAll('a');
-
-    anchorLinks.forEach((link) => {
-      link.removeEventListener('click', this.anchorClickHandler);
-    });
-  };
 
   enterItem = () => {
     this.setState({
