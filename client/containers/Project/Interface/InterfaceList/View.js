@@ -505,7 +505,7 @@ class View extends Component {
               </Row>
             )}
         </div>
-        {this.props.curData.desc && <h2 className="interface-title">ℹ️{intl.get('InterfaceList.View.备注')} </h2>}
+        {this.props.curData.desc && <h2 className="interface-title">{intl.get('InterfaceList.View.备注')} </h2>}
         {this.props.curData.desc && (
           <div
             className="tui-editor-contents"
