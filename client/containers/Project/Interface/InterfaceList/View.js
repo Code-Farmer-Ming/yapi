@@ -220,38 +220,10 @@ class View extends Component {
   }
 
   componentDidMount() {
-    alert('componentDidMount');
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
-    this.handleAnchorScroll();
-
   }
-
-  componentDidUpdate() {
-
-    this.handleAnchorScroll();
-    alert('componentDidUpdate');
-  }
-
-  handleAnchorScroll() {
-    const { hash } = window.location;
-
-    if (hash) {
-      const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
-
-
-      setTimeout(() => {
-
-        window.scrollTo({
-          behavior: targetElement ? "smooth" : "auto",
-          top: targetElement ? targetElement.offsetTop : 0
-        });
-        alert('scrollTo');
-      }, 1000);
-    }
-  }
-
 
   enterItem = () => {
     this.setState({
