@@ -223,7 +223,45 @@ class View extends Component {
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
+    this.handleAnchorClick();
   }
+
+  componentWillUnmount() {
+    // 在组件卸载前移除事件监听器，清理工作
+    this.removeAnchorClick();
+  }
+
+  handleAnchorClick = () => {
+    // 监听锚点的点击事件
+    const handleAnchorClick = (event) => {
+      event.preventDefault();
+      const targetId = event.target.getAttribute('href').substring(1); // 去掉锚点前的 #
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    // 添加事件监听器到渲染后的HTML内容上
+    const anchorLinks = document.querySelectorAll('a');
+
+    anchorLinks.forEach((link) => {
+      link.addEventListener('click', handleAnchorClick);
+    });
+
+    // 存储事件监听器，以便在组件卸载时移除
+    this.anchorClickHandler = handleAnchorClick;
+  };
+
+  removeAnchorClick = () => {
+    // 移除事件监听器，清理工作
+    const anchorLinks = document.querySelectorAll('a');
+
+    anchorLinks.forEach((link) => {
+      link.removeEventListener('click', this.anchorClickHandler);
+    });
+  };
 
   enterItem = () => {
     this.setState({
@@ -362,7 +400,7 @@ class View extends Component {
 
     let methodColor =
       variable.METHOD_COLOR[
-        this.props.curData.method ? this.props.curData.method.toLowerCase() : 'get'
+      this.props.curData.method ? this.props.curData.method.toLowerCase() : 'get'
       ];
 
     // statusColor = statusColor[this.props.curData.status?this.props.curData.status.toLowerCase():"undone"];
@@ -455,12 +493,11 @@ class View extends Component {
                 onClick={() =>
                   window.open(
                     location.protocol +
-                      '//' +
-                      location.hostname +
-                      (location.port !== '' ? ':' + location.port : '') +
-                      `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
-                        this.props.curData.path
-                      }`,
+                    '//' +
+                    location.hostname +
+                    (location.port !== '' ? ':' + location.port : '') +
+                    `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${this.props.curData.path
+                    }`,
                     '_blank'
                   )
                 }
@@ -469,8 +506,7 @@ class View extends Component {
                   '//' +
                   location.hostname +
                   (location.port !== '' ? ':' + location.port : '') +
-                  `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
-                    this.props.curData.path
+                  `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${this.props.curData.path
                   }`}
               </span>
             </Col>
@@ -538,7 +574,7 @@ class View extends Component {
           style={{
             display:
               this.props.curData.method &&
-              HTTP_METHOD[this.props.curData.method.toUpperCase()].request_body
+                HTTP_METHOD[this.props.curData.method.toUpperCase()].request_body
                 ? ''
                 : 'none'
           }}
@@ -549,10 +585,10 @@ class View extends Component {
           {this.props.curData.req_body_type === 'form'
             ? this.req_body_form(this.props.curData.req_body_type, this.props.curData.req_body_form)
             : this.req_body(
-                this.props.curData.req_body_type,
-                this.props.curData.req_body_other,
-                this.props.curData.req_body_is_json_schema
-              )}
+              this.props.curData.req_body_type,
+              this.props.curData.req_body_other,
+              this.props.curData.req_body_is_json_schema
+            )}
         </div>
 
         <h2 className="interface-title">{intl.get('InterfaceList.View.返回数据')}</h2>
