@@ -234,11 +234,14 @@ class View extends Component {
     const { hash } = window.location;
 
     if (hash) {
-      const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
+      timeout(() => {
+        const targetElement = document.getElementById(hash.substring(1)); // 去掉锚点前的 #
 
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-      }
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+
 
 
     }
