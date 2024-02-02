@@ -220,14 +220,18 @@ class View extends Component {
   }
 
   componentDidMount() {
+    alert('componentDidMount');
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
     this.handleAnchorScroll();
+
   }
 
   componentDidUpdate() {
+
     this.handleAnchorScroll();
+    alert('componentDidUpdate');
   }
 
   handleAnchorScroll() {
