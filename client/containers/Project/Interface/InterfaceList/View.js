@@ -238,11 +238,13 @@ class View extends Component {
 
 
       setTimeout(() => {
+
         window.scrollTo({
           behavior: targetElement ? "smooth" : "auto",
           top: targetElement ? targetElement.offsetTop : 0
         });
-      }, 100);
+        alert('scrollTo');
+      }, 1000);
     }
   }
 
