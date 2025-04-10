@@ -56,7 +56,7 @@ export default class Project extends Component {
     ]);
   }
 
-  async componentWillReceiveProps(nextProps) {
+  async UNSAFE_componentWillReceiveProps(nextProps) {
     const currProjectId = this.props.match.params.id;
     const nextProjectId = nextProps.match.params.id;
     if (currProjectId !== nextProjectId) {
@@ -139,7 +139,7 @@ export default class Project extends Component {
       });
     }
 
-    if (Object.keys(this.props.curProject).length === 0) {
+    if (this.props.curProject == null || Object.keys(this.props.curProject).length === 0) {
       return <Loading visible />;
     }
 
