@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import intl from 'react-intl-universal';
 
 function importData(importDataModule) {
   async function run(res) {
@@ -18,7 +19,7 @@ function importData(importDataModule) {
       return interfaceData;
     } catch (e) {
       console.error(e);
-      message.error('数据格式有误');
+      message.error(intl.get('ImportYapiJson.client.数据格式有误'));
     }
   }
 
@@ -30,7 +31,7 @@ function importData(importDataModule) {
   importDataModule.json = {
     name: 'json',
     run: run,
-    desc: 'YApi接口 json数据导入'
+    desc: intl.get('ImportYapiJson.client.YApi接口 json数据导入')
   };
 }
 

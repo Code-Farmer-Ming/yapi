@@ -1,20 +1,21 @@
 // import {message} from 'antd'
+import intl from 'react-intl-universal';
 
 function exportData(exportDataModule, pid) {
   exportDataModule.html = {
     name: 'html',
     route: `/api/plugin/export?type=html&pid=${pid}`,
-    desc: '导出项目接口文档为 html 文件'
+    desc: intl.get('ExportData.client.导出html文档')
   };
   (exportDataModule.markdown = {
     name: 'markdown',
     route: `/api/plugin/export?type=markdown&pid=${pid}`,
-    desc: '导出项目接口文档为 markdown 文件'
+    desc: intl.get('ExportData.client.导出markdown文档')
   }),
     (exportDataModule.json = {
       name: 'json',
       route: `/api/plugin/export?type=json&pid=${pid}`,
-      desc: '导出项目接口文档为 json 文件,可使用该文件导入接口数据'
+      desc: intl.get('ExportData.client.导出json文档')
     });
   // exportDataModule.pdf = {
   //     name: 'pdf',

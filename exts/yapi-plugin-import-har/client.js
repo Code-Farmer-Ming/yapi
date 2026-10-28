@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import intl from 'react-intl-universal';
 import URL from 'url';
 const GenerateSchema = require('generate-schema/src/schemas/json.js');
 import { json_parse, unbase64 } from '../../common/utils.js';
@@ -109,7 +110,7 @@ function postman(importDataModule) {
       return interfaceData;
     } catch (e) {
       console.error(e);
-      message.error('数据格式有误');
+      message.error(intl.get('ImportHar.client.数据格式有误'));
     }
   }
 
@@ -220,7 +221,7 @@ function postman(importDataModule) {
   importDataModule.har = {
     name: 'HAR',
     run: run,
-    desc: '使用chrome录制请求功能，具体使用请查看文档'
+    desc: intl.get('ImportHar.client.使用chrome录制请求功能')
   };
 }
 

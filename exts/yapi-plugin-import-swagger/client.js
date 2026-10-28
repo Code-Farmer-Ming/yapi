@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import intl from 'react-intl-universal';
 import run from './run';
 
 module.exports = function() {
@@ -14,12 +15,12 @@ module.exports = function() {
           return await run(res);
         } catch (err) {
           console.error(err);
-          message.error('解析失败');
+          message.error(intl.get('ImportSwagger.client.解析失败'));
         }
       },
-      desc: `<p>Swagger数据导入（ 支持 v2.0+ ）</p>
+      desc: `<p>${intl.get('ImportSwagger.client.Swagger数据导入')}</p>
       <p>
-        <a target="_blank" href="https://hellosean1025.github.io/yapi/documents/data.html#通过命令行导入接口数据">通过命令行导入接口数据</a>
+        <a target="_blank" href="https://hellosean1025.github.io/yapi/documents/data.html#通过命令行导入接口数据">${intl.get('ImportSwagger.client.通过命令行导入接口数据')}</a>
       </p>
       `
     };

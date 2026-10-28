@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import intl from 'react-intl-universal';
 import URL from 'url';
 import _ from 'underscore';
 const GenerateSchema = require('generate-schema/src/schemas/json.js');
@@ -115,7 +116,7 @@ function postman(importDataModule) {
 
       return interfaceData;
     } catch (e) {
-      message.error('文件格式必须为JSON');
+      message.error(intl.get('ImportPostman.client.文件格式必须为JSON'));
     }
   }
 
@@ -217,7 +218,9 @@ function postman(importDataModule) {
       }
     } catch (err) {
       console.log(err.message);
-      message.error(`${err.message}, 导入的postman格式有误`);
+      message.error(
+        `${err.message}, ${intl.get('ImportPostman.client.导入的postman格式有误')}`
+      );
     }
     return res;
   }
@@ -258,7 +261,7 @@ function postman(importDataModule) {
   importDataModule.postman = {
     name: 'Postman',
     run: run,
-    desc: '注意：只支持json格式数据'
+    desc: intl.get('ImportPostman.client.注意：只支持json格式数据')
   };
 }
 
