@@ -50,7 +50,7 @@ const columns = () => [
     title: intl.get('SchemaTable.SchemaTable.是否必须'),
     dataIndex: 'required',
     key: 'required',
-    width: 80,
+    width: 150,
     render: text => {
       return (
         <div>
@@ -65,7 +65,7 @@ const columns = () => [
     title: intl.get('SchemaTable.SchemaTable.默认值'),
     dataIndex: 'default',
     key: 'default',
-    width: 80,
+    width: 120,
     render: text => {
       return <div>{_.isBoolean(text) ? text + '' : text}</div>;
     }
