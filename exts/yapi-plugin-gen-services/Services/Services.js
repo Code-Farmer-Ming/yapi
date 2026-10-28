@@ -1,6 +1,7 @@
 import React, { PureComponent as Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
+import intl from 'react-intl-universal'
 import { getToken } from '../../../client/reducer/modules/project.js'
 
 
@@ -26,19 +27,19 @@ export default class Services extends Component {
   async componentDidMount() {
     const id = this.props.projectId;
     await this.props.getToken(id);
-    
+
   }
-  render () {
+  render() {
     const id = this.props.projectId;
     return (
       <div className="project-services">
         <section className="news-box m-panel">
           <div className="token">
-            <h5>安装工具</h5>
+            <h5>Install Tools</h5>
             <pre>{`
   npm i sm2tsservice -D
   `}</pre>
-            <h5>配置【3.2.0及以上版本】</h5>
+            <h5>Configuration [Version 3.2.0 and above]</h5>
             <pre>{`
   touch json2service.json
   `}</pre>
@@ -51,7 +52,7 @@ export default class Services extends Component {
   }
   `}
             </pre>
-            <h5>配置【3.2.0以下版本】</h5>
+            <h5>Configuration [Version 3.2.0 and below]</h5>
             <pre>{`
   touch json2service.json
   `}</pre>
@@ -63,12 +64,12 @@ export default class Services extends Component {
   }
   `}
             </pre>
-            <h5>生成services代码</h5>
+            <h5>{intl.get('Services.Services.生成services代码')}</h5>
             <pre>{`
   (./node_modules/.bin/)sm2tsservice --clear
   `}</pre>
           </div>
-          <a href="https://github.com/gogoyqj/sm2tsservice">更多说明 sm2tsservice</a>
+          <a href="https://github.com/gogoyqj/sm2tsservice">more sm2tsservice</a>
         </section>
       </div>
     );
