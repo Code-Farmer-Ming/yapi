@@ -190,6 +190,8 @@
   "SchemaTable.SchemaTable.非必须": "non-essential",
   "SchemaTable.SchemaTable.默认值": "default value",
   "SchemaTable.SchemaTable.其他信息": "Additional information",
+  "AdvMock.client.高级Mock": "Advanced Mock",
+  "Services.Services.生成services代码": "Generate services code",
   "TimeLine.TimeLine.项目": "project",
   "TimeLine.TimeLine.分组": "group",
   "TimeLine.TimeLine.接口": "API",

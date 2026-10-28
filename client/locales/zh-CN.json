@@ -190,6 +190,8 @@
   "SchemaTable.SchemaTable.非必须": "非必须",
   "SchemaTable.SchemaTable.默认值": "默认值",
   "SchemaTable.SchemaTable.其他信息": "其他信息",
+  "AdvMock.client.高级Mock": "高级Mock",
+  "Services.Services.生成services代码": "生成services代码",
   "TimeLine.TimeLine.项目": "项目",
   "TimeLine.TimeLine.分组": "分组",
   "TimeLine.TimeLine.接口": "接口",

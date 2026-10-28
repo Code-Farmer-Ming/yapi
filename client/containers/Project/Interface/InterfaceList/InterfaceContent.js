@@ -8,6 +8,7 @@ import { Prompt } from 'react-router';
 import { fetchInterfaceData } from '../../../../reducer/modules/interface.js';
 import { withRouter } from 'react-router-dom';
 import Run from './Run/Run.js';
+import intl from 'react-intl-universal';
 const plugin = require('client/plugin.js');
 
 const TabPane = Tabs.TabPane;
@@ -114,15 +115,15 @@ class Content extends Component {
     let InterfaceTabs = {
       view: {
         component: View,
-        name: '预览'
+        name: intl.get('InterfaceList.InterfaceContent.预览')
       },
       edit: {
         component: Edit,
-        name: '编辑'
+        name: intl.get('InterfaceList.InterfaceContent.编辑')
       },
       run: {
         component: Run,
-        name: '运行'
+        name: intl.get('InterfaceList.InterfaceContent.运行')
       }
     };
 
