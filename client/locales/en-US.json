@@ -187,7 +187,7 @@
   "SchemaTable.SchemaTable.类型": "genre",
   "SchemaTable.SchemaTable.是否必须": "Mandatory",
   "SchemaTable.SchemaTable.必须": "Yes",
-  "SchemaTable.SchemaTable.非必须": "Not",
+  "SchemaTable.SchemaTable.非必须": "No",
   "SchemaTable.SchemaTable.默认值": "default value",
   "SchemaTable.SchemaTable.其他信息": "Additional information",
   "AdvMock.client.高级Mock": "Advanced Mock",
