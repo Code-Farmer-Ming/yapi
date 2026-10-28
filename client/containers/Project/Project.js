@@ -136,7 +136,7 @@ export default class Project extends Component {
 
     if (this.props.currGroup.type === 'private') {
       subnavData = subnavData.filter(item => {
-        return item.name != '成员管理';
+        return item.path !== `/project/${match.params.id}/members`;
       });
     }
 
