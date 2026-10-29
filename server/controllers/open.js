@@ -309,11 +309,13 @@ class openController extends baseController {
     };
     try {
       options.taskId = this.getUid();
-      let data = await crossRequest(options, interfaceData.pre_script, interfaceData.after_script,createContex(
-        this.getUid(),
-        interfaceData.project_id,
-        interfaceData.interface_id
-      ));
+      let data = await crossRequest(
+        options,
+        interfaceData.pre_script,
+        interfaceData.after_script,
+        createContex(this.getUid(), interfaceData.project_id, interfaceData.interface_id),
+        yapi.WEBCONFIG.scriptEnable === true
+      );
       let res = data.res;
 
       result = Object.assign(result, {

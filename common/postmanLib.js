@@ -244,8 +244,15 @@ function sandboxByBrowser(context = {}, script) {
  * @param {*} preScript 
  * @param {*} afterScript 
  * @param {*} commonContext  负责传递一些业务信息，crossRequest 不关注具体传什么，只负责当中间人
+ * @param {boolean} scriptEnable Whether the caller permits pre/post-request scripts.
  */
-async function crossRequest(defaultOptions, preScript, afterScript, commonContext = {}) {
+async function crossRequest(
+  defaultOptions,
+  preScript,
+  afterScript,
+  commonContext = {},
+  scriptEnable = false
+) {
   let options = Object.assign({}, defaultOptions);
   const taskId = options.taskId || Math.random() + '';
   let urlObj = URL.parse(options.url, true),
@@ -300,13 +307,7 @@ async function crossRequest(defaultOptions, preScript, afterScript, commonContex
     axios: axios
   });
 
-  let scriptEnable = false;
-  try {
-    const yapi = require('../server/yapi');
-    scriptEnable = yapi.WEBCONFIG.scriptEnable === true;
-  } catch (err) {}
-
-  if (preScript && scriptEnable) {
+  if (preScript && scriptEnable === true) {
     context = await sandbox(context, preScript);
     defaultOptions.url = options.url = URL.format({
       protocol: urlObj.protocol,
@@ -346,7 +347,7 @@ async function crossRequest(defaultOptions, preScript, afterScript, commonContex
     });
   }
 
-  if (afterScript && scriptEnable) {
+  if (afterScript && scriptEnable === true) {
     context.responseData = data.res.body;
     context.responseHeader = data.res.header;
     context.responseStatus = data.res.status;
