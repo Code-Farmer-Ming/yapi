@@ -61,7 +61,7 @@ let routerConfig = {
       method: 'get'
     },
 
-    
+
     {
       action: 'list',
       path: 'list',
@@ -326,6 +326,11 @@ let routerConfig = {
     {
       action: 'del',
       path: 'del',
+      method: 'post'
+    },
+    {
+      action: 'delBatch',
+      path: 'del_batch',
       method: 'post'
     },
     {

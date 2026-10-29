@@ -60,21 +60,21 @@ class EditableCell extends React.Component {
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
         {form.getFieldDecorator(dataIndex, {
-            rules: [
-              {
-                required: true,
-                message: `${title} is required.`
-              }
-            ],
-            initialValue: record[dataIndex]
-          })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+          rules: [
+            {
+              required: true,
+              message: `${title} is required.`
+            }
+          ],
+          initialValue: record[dataIndex]
+        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
       </Form.Item>
     ) : (
       <div
-            className="editable-cell-value-wrap"
-            style={{ paddingRight: 24 }}
-            onClick={this.toggleEdit}
-        >
+        className="editable-cell-value-wrap"
+        style={{ paddingRight: 24 }}
+        onClick={this.toggleEdit}
+      >
         {children}
       </div>
     );
@@ -95,9 +95,9 @@ class EditableCell extends React.Component {
       <td {...restProps}>
         {editable ? (
           <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-          ) : (
-              children
-          )}
+        ) : (
+          children
+        )}
       </td>
     );
   }
@@ -110,6 +110,7 @@ const EditableFormRow = Form.create()(EditableRow);
     return {
       curData: state.inter.curdata,
       curProject: state.project.currProject,
+      currentUserRole: state.user.role,
       catList: state.inter.list,
       totalTableList: state.inter.totalTableList,
       catTableList: state.inter.catTableList,
@@ -133,7 +134,8 @@ class InterfaceList extends Component {
       filteredInfo: {},
       catid: null,
       total: null,
-      current: 1
+      current: 1,
+      selectedInterfaceIds: []
     };
   }
 
@@ -142,6 +144,7 @@ class InterfaceList extends Component {
     catList: PropTypes.array,
     match: PropTypes.object,
     curProject: PropTypes.object,
+    currentUserRole: PropTypes.string,
     history: PropTypes.object,
     fetchInterfaceListMenu: PropTypes.func,
     fetchInterfaceList: PropTypes.func,
@@ -170,7 +173,7 @@ class InterfaceList extends Component {
       await this.props.fetchInterfaceList(option);
     } else if (isNaN(params.actionId)) {
       let catid = params.actionId.substr(4);
-      this.setState({catid: +catid});
+      this.setState({ catid: +catid });
       let option = {
         page: this.state.current,
         limit,
@@ -216,12 +219,14 @@ class InterfaceList extends Component {
 
   componentWillReceiveProps(nextProps) {
     let _actionId = nextProps.match.params.actionId;
+    const projectChanged = this.props.match.params.id !== nextProps.match.params.id;
 
-    if (this.actionId !== _actionId) {
+    if (projectChanged || this.actionId !== _actionId) {
       this.actionId = _actionId;
       this.setState(
         {
-          current: 1
+          current: 1,
+          selectedInterfaceIds: []
         },
         () => this.handleRequest(nextProps)
       );
@@ -290,16 +295,53 @@ class InterfaceList extends Component {
     };
     const me = this;
     axios.post('/api/interface/up_index', [changes]).then(
-        () => {
-          me.handleRequest(me.props);
-        }
+      () => {
+        me.handleRequest(me.props);
+      }
     );
   }
+
+  handleBatchDelete = () => {
+    const ids = this.state.selectedInterfaceIds;
+    if (!ids.length) {
+      return;
+    }
+
+    Modal.confirm({
+      title: intl.get('InterfaceList.InterfaceList.批量删除接口'),
+      content: intl.get('InterfaceList.InterfaceList.确认批量删除接口', { count: ids.length }),
+      okText: intl.get('InterfaceList.InterfaceList.确认'),
+      cancelText: intl.get('InterfaceList.InterfaceList.取消'),
+      okType: 'danger',
+      onOk: async () => {
+        try {
+          const res = await axios.post('/api/interface/del_batch', {
+            project_id: this.props.curProject._id,
+            ids
+          });
+          if (res.data.errcode !== 0) {
+            return message.error(res.data.errmsg);
+          }
+
+          this.setState({ selectedInterfaceIds: [] });
+          message.success(
+            intl.get('InterfaceList.InterfaceList.批量删除成功', {
+              count: res.data.data.deleted
+            })
+          );
+          await this.handleRequest(this.props);
+          this.props.fetchInterfaceListMenu(this.props.curProject._id);
+        } catch (error) {
+          message.error(error.message);
+        }
+      }
+    });
+  };
 
   render() {
     let tag = this.props.curProject.tag;
     let tagFilter = tag.map(item => {
-      return {text: item.name, value: item.name};
+      return { text: item.name, value: item.name };
     });
 
     const columns = [
@@ -345,7 +387,7 @@ class InterfaceList extends Component {
         }
       },
       {
-        title:  intl.get('InterfaceList.InterfaceList.接口分类'),
+        title: intl.get('InterfaceList.InterfaceList.接口分类'),
         dataIndex: 'catid',
         key: 'catid',
         width: 28,
@@ -464,6 +506,13 @@ class InterfaceList extends Component {
     };
 
     const isDisabled = this.props.catList.length === 0;
+    const isAdmin = this.props.currentUserRole === 'admin';
+    const rowSelection = isAdmin
+      ? {
+        selectedRowKeys: this.state.selectedInterfaceIds,
+        onChange: selectedInterfaceIds => this.setState({ selectedInterfaceIds })
+      }
+      : undefined;
 
     // console.log(this.props.curProject.tag)
     const components = {
@@ -491,7 +540,7 @@ class InterfaceList extends Component {
     return (
       <div style={{ padding: '24px' }}>
         <h2 className="interface-title" style={{ display: 'inline-block', margin: 0 }}>
-        {intername ? intername : intl.get('InterfaceList.InterfaceList.全部接口')}{intl.get('InterfaceList.InterfaceList.共 (')}{total}{intl.get('InterfaceList.InterfaceList.) 个')}
+          {intername ? intername : intl.get('InterfaceList.InterfaceList.全部接口')}{intl.get('InterfaceList.InterfaceList.共 (')}{total}{intl.get('InterfaceList.InterfaceList.) 个')}
         </h2>
 
         <Button
@@ -500,8 +549,19 @@ class InterfaceList extends Component {
           type="primary"
           onClick={() => this.setState({ visible: true })}
         >
-            {intl.get('InterfaceList.InterfaceList.添加接口')}
+          {intl.get('InterfaceList.InterfaceList.添加接口')}
         </Button>
+        {isAdmin && (
+          <Button
+            style={{ float: 'right', marginRight: '8px' }}
+            type="danger"
+            icon="delete"
+            disabled={!this.state.selectedInterfaceIds.length}
+            onClick={this.handleBatchDelete}
+          >
+            {intl.get('InterfaceList.InterfaceList.批量删除')}
+          </Button>
+        )}
         <div style={{ marginTop: '10px' }}>
           <Label onChange={value => this.handleChangeInterfaceCat(value, intername)} desc={desc} />
         </div>
@@ -513,6 +573,7 @@ class InterfaceList extends Component {
           pagination={pageConfig}
           components={components}
           columns={editAbleColumns}
+          rowSelection={rowSelection}
           rowClassName={() => 'editable-row'}
           onChange={this.handleChange}
           dataSource={data}
