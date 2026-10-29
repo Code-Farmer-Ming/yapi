@@ -85,7 +85,7 @@ export default class Group extends Component {
             }}
           >
             <Tabs type="card" className="m-tab tabs-large" style={{ height: '100%' }}>
-              <TabPane tab={intl.get('Group.Group.项目列表')} key="1">
+              <TabPane tab={'Projects'} key="1">
                 <ProjectList />
               </TabPane>
               {this.props.currGroup.type === 'public' && this.props.curUserRoleInGroup !== 'guest' ? (
