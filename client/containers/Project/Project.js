@@ -138,9 +138,12 @@ export default class Project extends Component {
       subnavData.push(value);
     });
 
-    if (this.props.currGroup.type === 'private') {
+    if (this.props.currGroup.type === 'private' || this.props.curProject.role === 'guest') {
       subnavData = subnavData.filter(item => {
-        return item.path !== `/project/${match.params.id}/members`;
+        return (
+          item.path !== `/project/${match.params.id}/members` &&
+          !(this.props.curProject.role === 'guest' && item.path === `/project/${match.params.id}/setting`)
+        );
       });
     }
 
@@ -166,10 +169,10 @@ export default class Project extends Component {
             let item = routers[key];
 
             return key === 'members' ? (
-              this.props.currGroup.type !== 'private' ? (
+              this.props.currGroup.type !== 'private' && this.props.curProject.role !== 'guest' ? (
                 <Route path={item.path} component={item.component} key={key} />
               ) : null
-            ) : (
+            ) : key === 'setting' && this.props.curProject.role === 'guest' ? null : (
               <Route path={item.path} component={item.component} key={key} />
             );
           })}

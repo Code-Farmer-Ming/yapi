@@ -17,7 +17,8 @@ const TabPane = Tabs.TabPane;
     return {
       curdata: state.inter.curdata,
       list: state.inter.list,
-      editStatus: state.inter.editStatus
+      editStatus: state.inter.editStatus,
+      curProjectRole: state.project.currProject.role
     };
   },
   {
@@ -31,7 +32,8 @@ class Content extends Component {
     curdata: PropTypes.object,
     fetchInterfaceData: PropTypes.func,
     history: PropTypes.object,
-    editStatus: PropTypes.bool
+    editStatus: PropTypes.bool,
+    curProjectRole: PropTypes.string
   };
   constructor(props) {
     super(props);
@@ -129,22 +131,27 @@ class Content extends Component {
 
     plugin.emitHook('interface_tab', InterfaceTabs);
 
+    const canEdit = this.props.curProjectRole !== 'guest';
+    const activeTab = !canEdit && this.state.curtab === 'edit' ? 'view' : this.state.curtab;
     const tabs = (
       <Tabs
         className="tabs-large"
         onChange={this.onChange}
-        activeKey={this.state.curtab}
+        activeKey={activeTab}
         defaultActiveKey="view"
       >
         {Object.keys(InterfaceTabs).map(key => {
           let item = InterfaceTabs[key];
+          if (key === 'edit' && !canEdit) {
+            return null;
+          }
           return <TabPane tab={item.name} key={key} />;
         })}
       </Tabs>
     );
     let tabContent = null;
-    if (this.state.curtab) {
-      let C = InterfaceTabs[this.state.curtab].component;
+    if (activeTab) {
+      let C = InterfaceTabs[activeTab].component;
       tabContent = <C switchToView={this.switchToView} />;
     }
 
