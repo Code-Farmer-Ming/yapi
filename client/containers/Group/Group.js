@@ -41,15 +41,15 @@ export default class Group extends Component {
     }
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     let r = await axios.get('/api/group/get_mygroup')
-    try{
+    try {
       let group = r.data.data;
       this.setState({
         groupId: group._id
       })
       this.props.setCurrGroup(group)
-    }catch(e){
+    } catch (e) {
       console.error(e)
     }
   }
@@ -68,7 +68,7 @@ export default class Group extends Component {
   //   // }
   // }
   render() {
-    if(this.state.groupId === -1)return <Spin />
+    if (this.state.groupId === -1) return <Spin />
     const GroupContent = (
       <Layout style={{ minHeight: 'calc(100vh - 100px)', marginLeft: '24px', marginTop: '24px' }}>
         <Sider style={{ height: '100%' }} width={300}>
@@ -88,13 +88,13 @@ export default class Group extends Component {
               <TabPane tab={intl.get('Group.Group.项目列表')} key="1">
                 <ProjectList />
               </TabPane>
-              {this.props.currGroup.type === 'public' ? (
+              {this.props.currGroup.type === 'public' && this.props.curUserRoleInGroup !== 'guest' ? (
                 <TabPane tab={intl.get('Group.Group.成员列表')} key="2">
                   <MemberList />
                 </TabPane>
               ) : null}
               {['admin', 'owner', 'guest', 'dev'].indexOf(this.props.curUserRoleInGroup) > -1 ||
-              this.props.curUserRole === 'admin' ? (
+                this.props.curUserRole === 'admin' ? (
                 <TabPane tab={intl.get('Group.Group.分组动态')} key="3">
                   <GroupLog />
                 </TabPane>
@@ -102,7 +102,7 @@ export default class Group extends Component {
                 ''
               )}
               {(this.props.curUserRole === 'admin' || this.props.curUserRoleInGroup === 'owner') &&
-              this.props.currGroup.type !== 'private' ? (
+                this.props.currGroup.type !== 'private' ? (
                 <TabPane tab={intl.get('Group.Group.分组设置')} key="4">
                   <GroupSetting />
                 </TabPane>

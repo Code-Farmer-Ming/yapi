@@ -131,8 +131,11 @@ class Content extends Component {
 
     plugin.emitHook('interface_tab', InterfaceTabs);
 
-    const canEdit = this.props.curProjectRole !== 'guest';
-    const activeTab = !canEdit && this.state.curtab === 'edit' ? 'view' : this.state.curtab;
+    const isGuest = this.props.curProjectRole === 'guest';
+    const canEdit = !isGuest;
+    const activeTab = isGuest && (this.state.curtab === 'edit' || this.state.curtab === 'advMock')
+      ? 'view'
+      : this.state.curtab;
     const tabs = (
       <Tabs
         className="tabs-large"
@@ -142,7 +145,7 @@ class Content extends Component {
       >
         {Object.keys(InterfaceTabs).map(key => {
           let item = InterfaceTabs[key];
-          if (key === 'edit' && !canEdit) {
+          if (!canEdit && (key === 'edit' || key === 'advMock')) {
             return null;
           }
           return <TabPane tab={item.name} key={key} />;
