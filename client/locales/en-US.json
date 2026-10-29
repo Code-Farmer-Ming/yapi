@@ -1,8 +1,8 @@
 {
   "components.ErrMsg.你还没有关注项目呢": "You haven't followed any project yet.",
-  "components.ErrMsg.先去": "Go ",
+  "components.ErrMsg.先去": "Go to ",
   "components.ErrMsg.“项目广场”": "\"Project Square\"",
-  "components.ErrMsg.逛逛吧,": "To take a look! You can favorite some projects there.",
+  "components.ErrMsg.逛逛吧,": " to browse; you can follow projects there.",
   "components.ErrMsg.该项目还没有接口呢": "This project doesn't have an API yet.",
   "components.ErrMsg.在左侧 “接口列表”": "Add an API from the \"API List\" on the left.",
   "components.ErrMsg.该项目还没有成员呢": "This project has no members yet.",
